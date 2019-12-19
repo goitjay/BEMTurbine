@@ -1,0 +1,37 @@
+# Setup file for optimum_rotor.py
+# Do not alter, add or remove lines in this input file. Use space(s) for indentation and not tabs.
+#----------SAVE FILE RELATED----------------------------------------
+output                         --save_folder: Folder to save the data. If same folder .
+KDWT25_optimum_rotor.dat       --save_file:file_name
+#----------ROTOR PARAMETERS-----------------------------------------
+0.25                   --Rotor_diameter: Rotor diameter [m]
+3                      --Nblade: Number of blades
+5                      --tsr:Tip speed ratio
+#----------AIRFOIL PROPERTIES---------------------------------------
+1    	      	       --Nairfoil: Number of airfoils used (maximum 10)
+#Airfoilfile: name& folder, Afoil no., AoA_col, Cl_col, Cd_col, header, footer. e.g. AoA_col: column in Cl Cd file with angle of attack
+setup/SD7003_Re50000_ClCd, 1, 1, 2, 3, 1, 0   
+dum, 2, 0, 0, 0, 0, 0                  
+dum, 3, 0, 0, 0, 0, 0   	   
+dum, 4, 0, 0, 0, 0, 0	      	        
+dum, 5, 0, 0, 0, 0, 0	      	        
+dum, 6, 0, 0, 0, 0, 0	      	       
+dum, 7, 0, 0, 0, 0, 0	      	       
+dum, 8, 0, 0, 0, 0, 0	      	        
+dum, 9, 0, 0, 0, 0, 0	      	       
+dum, 10, 0, 0, 0, 0, 0
+#----------BLADE PROPERTIES---------------------------------------
+12                     --Nnode: Number of blade nodes
+Rnode [m],dRnode[m], Afoil no.
+0.01, 0.01, 1
+0.02, 0.01, 1
+0.03, 0.01, 1
+0.04, 0.01, 1
+0.05, 0.01, 1
+0.06, 0.01, 1
+0.07, 0.01, 1
+0.08, 0.01, 1
+0.09, 0.01, 1
+0.1,  0.01, 1
+0.11, 0.01, 1
+0.12, 0.01, 1
