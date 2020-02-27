@@ -8,7 +8,7 @@ The tool consists of two main python scripts:
 optimum' blade. The input parameters for this script should be defined in
 setup/optimum_rotor.inp.
 
-2. BEM_analysis.py: Estimates axiam induction factor and angular induction factor
+2. BEM_analysis.py: Estimates axial induction factor and angular induction factor
 iteratively using blade element momentum (BEM) theory, and use them to estimate
 power and thrust coefficients as a function of tip-speed ratio. The script also
 generates axial induction factor, angular induction factor, angle of attack, Cl
