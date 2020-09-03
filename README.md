@@ -17,6 +17,6 @@ this script should be defined in setup/BEM_analysis.inp.
 
 All the ouputs are save in folder output.
 
-The example case consist of optimization of blades for a small wind turbine wind
+The example case consist of optimization of blades for a small wind turbine with
 a rotor diameter of 0.25 m. The turbine uses SD7003 airfoil from the root to tip
 of the blade.
