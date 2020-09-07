@@ -61,6 +61,8 @@ def BEM_analysis():
         a_ang_ini =float(lines[8].split(' ')[1]) # Initial angular induction factor
         a_tol     =float(lines[9].split(' ')[0]) # Tolerance for induction factor calculation
         a_iter_max=int(lines[10].split(' ')[0]) # Maximum iteration for induction factor calculation
+        tip_loss=str2bool(lines[11].split(' ')[0]) # Flag for including tip loss correction factor. Only Prandtl's tip loss is implemented. True or False (logic)
+        
         #---Rotor parameters
         Drotor =float(lines[14].split(' ')[0]) # Rotor diameter
         Rad_rotor=Drotor/2.0 # Radius of rotor
@@ -149,9 +151,9 @@ def BEM_analysis():
                     break
                 
                 a_ax_bef=a_ax; a_ang_bef=a_ang;
-                AngleRelWind=np.arctan((1-a_ax)/((1+a_ang)*tsr_node))
+                AngleRelWind=np.arctan((1-a_ax)/((1+a_ang)*tsr_node)) # Eq. (3.63)
                 
-                AoA_calc=AngleRelWind-Twist[n] # calculated angle of attack
+                AoA_calc=AngleRelWind-Twist[n] # calculated angle of attack using Eq. (3.62)
                 i1 = (np.abs(AoA[:]-AoA_calc)).argmin()
                 if AoA[i1]>AoA_calc:
                     i1=i1-1
@@ -159,13 +161,18 @@ def BEM_analysis():
                 Cl_calc=(Cl[i1+1]-Cl[i1])/(AoA[i1+1]-AoA[i1])*(AoA_calc-AoA[i1])+Cl[i1]
                 Cd_calc=(Cd[i1+1]-Cd[i1])/(AoA[i1+1]-AoA[i1])*(AoA_calc-AoA[i1])+Cd[i1]
                 
+                if tip_loss:
+                    F_tl=2.0/np.pi*np.arccos(np.exp(-Nblade/2*(1-myu[n])/(myu[n]*np.sin(AngleRelWind)))) #Eq. (3.98) Prandtl's tip loss
+                else:
+                    F_tl=1.0
+                    
                 c1= Nblade*Chord[n]/Rad_rotor*(Cl_calc*np.cos(AngleRelWind)+Cd_calc*np.sin(AngleRelWind))/\
-                    ((np.sin(AngleRelWind))**2*8.0*np.pi*myu[n])
+                    ((np.sin(AngleRelWind))**2*8.0*np.pi*myu[n]*F_tl) #Equating 3.69 & 3.58 and substituting for Urel using 3.64
                 
                 a_ax=fsolve(func_a_ax,a_ax_bef,args=c1)[0]
                 #a_ax=c1/(1+c1) # this can also be used alternative to fsolve function above
                 a_ang= (1.0-a_ax)*Nblade*Chord[n]/Rad_rotor*(Cl_calc*np.sin(AngleRelWind)-Cd_calc*np.cos(AngleRelWind))/\
-                       ((np.sin(AngleRelWind))**2*8.0*np.pi*myu[n]**2*tsr[j])
+                       ((np.sin(AngleRelWind))**2*8.0*np.pi*myu[n]**2*tsr[j]*F_tl) # Equating Eq. (3.71) with (3.59)
             
             Ct[j]=Ct[j]+Ct_const*a_ax*(1-a_ax)*Rnode[n]*dRnode[n]
             Cp[j]=Cp[j]+Cp_const*a_ang*(1-a_ax)*Rnode[n]**3*dRnode[n]
