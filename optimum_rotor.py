@@ -4,7 +4,7 @@
 # The script uses Wind Energy Explained 2nd Edition Section 3.7 as references
 
 # Assumptions made in thsi analysis
-# 1. Angular induction factor (a')=0, i.e., no wake rotation
+# 1. Wake rotation included as a Flag
 # 2. There is no drag, Cd=0
 # 3. There is no losses due to a finite number of blades (i.e. no tip loss)
 # 4. Axial induction factor (a) =1/3 in each annular stream tube
@@ -37,17 +37,22 @@ def optimum_rotor():
     #---Read input setup file
     with open(setup_file,'r') as f:
         lines = f.readlines()
+        #---save file related
         save_folder= lines[3].split(' ')[0]
         save_file=   lines[4].split(' ')[0]
         save_file=save_folder+'/'+save_file
+        
+        #---Computation related
+        wake_rotation=str2bool(lines[6].split(' ')[0]) # Flag to include wake rotation in optimum rotor calculation. True or False (logic)
+        
         #---Rotor parameters
-        Drotor =float(lines[6].split(' ')[0]) # Rotor diameter
+        Drotor =float(lines[11].split(' ')[0]) # Rotor diameter
         Rad_rotor=Drotor/2.0 # Radius of rotor
-        Nblade =int(lines[7].split(' ')[0])   # Number of blades
-        tsr    =float(lines[8].split(' ')[0]) # Tip speed ratio
+        Nblade =int(lines[12].split(' ')[0])   # Number of blades
+        tsr    =float(lines[13].split(' ')[0]) # Tip speed ratio
         
         #---Airfoil properties
-        Nairfoil  =int(lines[10].split(' ')[0]) # Number of airfoils
+        Nairfoil  =int(lines[17].split(' ')[0]) # Number of airfoils
         Airfoilfile=np.empty((Nairfoil),dtype=object)
         Airfoil_no =np.empty((Nairfoil),dtype=int)
         AoA_col  =np.empty((Nairfoil),dtype=int) # Column with angle of attack in Cl Cd file
@@ -58,24 +63,23 @@ def optimum_rotor():
         
         #---Airoifl file information
         for n in range(Nairfoil):
-            Airfoilfile[n]=lines[12+n].split(',')[0]
-            Airfoil_no[n] =int(lines[12+n].split(',')[1])-1
-            AoA_col[n]    =int(lines[12+n].split(',')[2])-1
-            Cl_col[n]     =int(lines[12+n].split(',')[3])-1
-            Cd_col[n]     =int(lines[12+n].split(',')[4])-1
-            header[n]     =int(lines[12+n].split(',')[5]) #No. lines as header in airfoil dat file
-            footer[n]     =int(lines[12+n].split(',')[6]) 
+            Airfoilfile[n]=lines[19+n].split(',')[0]
+            Airfoil_no[n] =int(lines[19+n].split(',')[1])-1
+            AoA_col[n]    =int(lines[19+n].split(',')[2])-1
+            Cl_col[n]     =int(lines[19+n].split(',')[3])-1
+            Cd_col[n]     =int(lines[19+n].split(',')[4])-1
+            header[n]     =int(lines[19+n].split(',')[5]) #No. lines as header in airfoil dat file
+            footer[n]     =int(lines[19+n].split(',')[6]) 
                 
         #---Blade properties
-        Nnode =int(lines[23].split(' ')[0])
+        Nnode =int(lines[30].split(' ')[0])
         Rnode =np.empty((Nnode),dtype=float) # Center of node 
         dRnode =np.empty((Nnode),dtype=float) # Span of node
         Airfoil_id=np.empty((Nnode),dtype=int) # Airfoil number to use at the node
         for n in range(Nnode):
-            Rnode[n]=float(lines[25+n].split(',')[0])
-            dRnode[n]=float(lines[25+n].split(',')[1])
-            Airfoil_id[n]=int(lines[25+n].split(',')[2])-1
-    
+            Rnode[n]=float(lines[32+n].split(',')[0])
+            dRnode[n]=float(lines[32+n].split(',')[1])
+            Airfoil_id[n]=int(lines[32+n].split(',')[2])-1
     #====INPUT ends here==================
     
     Chord =np.empty((Nnode),dtype=float) # Chord length of the section
@@ -101,8 +105,16 @@ def optimum_rotor():
         print('AoA for max Cl/Cd',BlAoA[n],'   Clopt',Clopt,'   Cdopt',Cdopt)
         
         tsr_node= tsr*Rnode[n]/Rad_rotor
-        BlAngleRelWind[n]=np.arctan(2.0/(3.0*tsr_node)) # Eq. (3.78) of reference
-        Chord[n] = 8*np.pi*Rnode[n]*np.sin(BlAngleRelWind[n])/(3.0*Nblade*Clopt*tsr_node) # Eq. (3.79) 
+
+        #---Calculate angle of relative wind and chord lenght
+        if wake_rotation:
+            #---Wake rotation included
+            BlAngleRelWind[n]=2.0/3.0*np.arctan(1.0/tsr_node) # Eq. (3.105) of reference
+            Chord[n] = 8*np.pi*Rnode[n]*(1.0-np.cos(BlAngleRelWind[n]))/(Nblade*Clopt) # Eq. (3.106)
+        else:
+            # Wake rotation ignored
+            BlAngleRelWind[n]=np.arctan(2.0/(3.0*tsr_node)) # Eq. (3.78) of reference
+            Chord[n] = 8*np.pi*Rnode[n]*np.sin(BlAngleRelWind[n])/(3.0*Nblade*Clopt*tsr_node) # Eq. (3.79) 
         
         BlAngleRelWind[n] =BlAngleRelWind[n]*180.0/np.pi
         BlSectionPitch[n]=BlAngleRelWind[n]-BlAoA[n]

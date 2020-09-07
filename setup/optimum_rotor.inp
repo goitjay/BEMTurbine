@@ -3,10 +3,17 @@
 #----------SAVE FILE RELATED----------------------------------------
 output                         --save_folder: Folder to save the data. If same folder .
 KDWT25_optimum_rotor.dat       --save_file:file_name
+#----------COMPUTATION RELATED--------------------------------------
+False             --wake_rotation: Flag to include wake rotation in optimum rotor calculation. True or False (logic)
+#
+#
+#
 #----------ROTOR PARAMETERS-----------------------------------------
-0.25                   --Rotor_diameter: Rotor diameter [m]
+0.25                   - Drotor: Rotor diameter [m]
 3                      --Nblade: Number of blades
 5                      --tsr:Tip speed ratio
+#
+#
 #----------AIRFOIL PROPERTIES---------------------------------------
 1    	      	       --Nairfoil: Number of airfoils used (maximum 10)
 #Airfoilfile: name& folder, Afoil no., AoA_col, Cl_col, Cd_col, header, footer. e.g. AoA_col: column in Cl Cd file with angle of attack
