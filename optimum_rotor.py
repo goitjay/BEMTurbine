@@ -81,6 +81,18 @@ def optimum_rotor():
             dRnode[n]=float(lines[32+n].split(',')[1])
             Airfoil_id[n]=int(lines[32+n].split(',')[2])-1
     #====INPUT ends here==================
+
+    #---Some checks
+    # Check if Rnode values in setup files are correct.
+    if np.abs(Rnode[-1]-Rad_rotor)/Rad_rotor*100>5:
+        print("The last Rnode value ",str(Rnode[-1]), "m is different from Radius of the rotor", str(Rad_rotor),"m by more than",str(5),"%.\nThe calculation will terminate here.")
+        sys.exit()
+
+    # Check if dRnode values in setup files are correct.
+    if np.abs(np.sum(dRnode)-Rad_rotor)/Rad_rotor*100>5:
+        print("Sum of dRnode values of",str(np.sum(dRnode)), "m is different from Radius of the rotor", str(Rad_rotor),"m by more than",str(5),"%.\nThe calculation will terminate here.")
+        sys.exit()
+    
     
     Chord =np.empty((Nnode),dtype=float) # Chord length of the section
     BlAngleRelWind=np.empty((Nnode),dtype=float) # Angle of relative wind at node position

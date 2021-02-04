@@ -113,6 +113,18 @@ def BEM_analysis():
     myu = Rnode/Rad_rotor # r/R
     
     #====INPUT ends here==================
+
+    #---Some checks
+    # Check if Rnode values in setup files are correct.
+    if np.abs(Rnode[-1]-Rad_rotor)/Rad_rotor*100>5:
+        print("The last Rnode value ",str(Rnode[-1]), "m is different from Radius of the rotor", str(Rad_rotor),"m by more than",str(5),"%.\nThe calculation will terminate here.")
+        sys.exit()
+
+    # Check if dRnode values in setup files are correct.
+    if np.abs(np.sum(dRnode)-Rad_rotor)/Rad_rotor*100>15:
+        print("Sum of dRnode values of",str(np.sum(dRnode)), "m is different from Radius of the rotor", str(Rad_rotor),"m by more than",str(15),"%.\nThe calculation will terminate here.")
+        sys.exit()
+    #---
     
     Cp = np.zeros(tsr.shape[0]) # power coefficient
     Ct = np.zeros(tsr.shape[0]) # Thrust coefficient
