@@ -1,21 +1,31 @@
 # Setup file for optimum_rotor.py
 # Do not alter, add or remove lines in this input file. Use space(s) for indentation and not tabs.
-#----------SAVE FILE RELATED----------------------------------------
-output                    --save_folder: Folder to save the data. If same folder use (.)
-KDWT25_tsrCpCT.dat        --file_cpct:file where Cp Ct are saved
-False                      --Flag for saving parameters for each element as a function of tsr. True or False (logic)
-element_params            --file_element_params: files where a_ax, a_ang, AoA, Cl, Cd for each blade element is saved.
+2                     --computation_to_perform  1: tsrCpCt, 2: WindSpeed_Character,  Pick the number to perform desired computation
+#----------COMPUTE Cp, Cq AND Ct AS A FUNCTION OF TSR----------------------------------------
+output                --save_folder_tsrCpCt: Folder to save the data. If same folder use (.)
+KDWT25_tsrCpCt.dat    --file_tsr_CpCt:file where Cp Cq and Ct are saved
+False                 --Flag for saving parameters for each element as a function of tsr. True or False (logic)
+element_params        --file_element_params: files where a_ax, a_ang, AoA, Cl, Cd for each blade element is saved.
+1.0 8.0 1.0           --tsrmin,tsrmax,tsrintrv:Tip speed ratio range for computation (separated by space)
+7.0                   --Uin: Inflow wind speed [m/s]
+0.0                   --opt_BladePitch: optimum blade pitch angle. Usually 0 degree, but use the design value [deg]
+#----------COMPUTE POWER AND OTHER PROPERTIES AS A FUNCTION OF WIND SPEED-------------------
+setup/KDWT25_WindSpeed.inp --file_WindSpeed_input: Folder and File containing Wind speed and corresponding rpm, pitch angle for computing wind speed characteristics of the turbine
+1 2 3                --WindSpeed_col, RotorSpeed_col,BladePitch_col: Columns in the above input file WindSpeed, RotorSpeed and BladePitch data respectively (separated by space)
+2 0                  --header_WindSpeed_inp,footer_WindSpeed_inp (seperated by space)
+output               --save_folder_WindSpeed_Character: Folder to save the data. If same folder use (.)
+KDWT25_WindSpeed_Character  --save_file_WindSpeed_Character:file where Power, Torque, Thrust are saved as a function of wind speed
+#
 #----------COMPUTATION RELATED--------------------------------------
 0.33 0.01             --a_ax_ini,a_ang_ini:Initial axial and angular induction factor
 0.001                 --a_tol: Tolerance for induction factors
 1000                  --a_iter_max: Maximum iteration for induction factor calculation loop
 True                  --tip_loss: Flag for including tip loss correction factor. Only Prandtl's tip loss is implemented. True or False (logic)
+1.2                   --AirDensity  [kg/m^3]
 #
 #----------ROTOR PARAMETERS-----------------------------------------
 0.25                   --Drotor: Rotor diameter [m]
 3                      --Nblade: Number of blades
-1.0 8.0 1.0           --tsrmin,tsrmax,tsrintrv:Tip speed ratio range (separated by space)
-7.0                    --Uin: Inflow wind speed [m/s]
 #
 #
 #----------AIRFOIL PROPERTIES---------------------------------------
@@ -34,7 +44,7 @@ dum, 10, 0, 0, 0, 0, 0
 #----------BLADE PROPERTIES---------------------------------------
 11                     --Nnode: Number of blade nodes
 Rnode [m], dRnode[m],Chord[m],Twist[deg],Afoil no.
-0.02,0.0,0.0367350114651088,28.226794497273275,1
+0.02,0.01,0.0367350114651088,28.226794497273275,1
 0.03,0.01,0.03352124670565333,20.537047394843466,1
 0.04,0.01,0.029078359779059253,15.33692213872233,1
 0.05,0.01,0.025131563010403795,11.710034118051993,1
