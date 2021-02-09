@@ -1,0 +1,25 @@
+# Input files for producing power, thrust and torque curves as a function of wind speed. Data should be seperated by comma
+Wind speed (m/s), Rotor speed (rpm), Blade Pitch Angle (deg)
+3, 12.15, 0
+4, 16.2, 0
+5, 20.2, 0
+6, 24.3, 0
+7, 28.3, 0
+8, 32.4, 0
+9, 36.4, 0
+10, 40.5, 0
+11, 40.5, 4.5
+11.5, 40.5, 6.0
+12, 40.5, 7.1
+13, 40.5, 9.3
+14, 40.5, 11.2
+15, 40.5, 12.9
+16, 40.5, 14.4
+17, 40.5, 15.8
+18, 40.5, 17.15
+19, 40.5, 18.4
+20, 40.5, 19.6
+21, 40.5, 20.75
+22, 40.5, 21.9
+23, 40.5, 22.95
+24, 40.5, 24.0

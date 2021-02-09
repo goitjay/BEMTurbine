@@ -44,7 +44,8 @@ def BEM_analysis():
     
     #====INPUT starts here================
     #setup_file=input("Enter the setup file: ")
-    setup_file='setup/BEM_analysis.inp'
+    #setup_file='setup/BEM_analysis.inp'
+    setup_file='setup/BEM_analysis_KDWT300kW.inp'
     
     #---Read input setup file
     global save_element_param,file_element_param

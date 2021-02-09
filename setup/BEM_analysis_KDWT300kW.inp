@@ -3,37 +3,37 @@
 2                     --computation_to_perform  1: tsrCpCt, 2: WindSpeed_Character,  Pick the number to perform desired computation
 #----------COMPUTE Cp, Cq AND Ct AS A FUNCTION OF TSR----------------------------------------
 output                --save_folder_tsrCpCt: Folder to save the data. If same folder use (.)
-KDWT25_tsrCpCt.dat    --file_tsr_CpCt:file where Cp Cq and Ct are saved
+KDWT300kW_tsrCpCt.dat    --file_tsr_CpCt:file where Cp Cq and Ct are saved
 False                 --Flag for saving parameters for each element as a function of tsr. True or False (logic)
 element_params        --file_element_params: files where a_ax, a_ang, AoA, Cl, Cd for each blade element is saved.
 1.0 8.0 1.0           --tsrmin,tsrmax,tsrintrv:Tip speed ratio range for computation (separated by space)
 7.0                   --Uin: Inflow wind speed [m/s]
 0.0                   --opt_BladePitch: optimum blade pitch angle. Usually 0 degree, but use the design value [deg]
 #----------COMPUTE POWER AND OTHER PROPERTIES AS A FUNCTION OF WIND SPEED-------------------
-setup/KDWT25_WindSpeed.inp --file_WindSpeed_input: Folder and File containing Wind speed and corresponding rpm, pitch angle for computing wind speed characteristics of the turbine
+setup/KDWT300kW_WindSpeed_character.inp --file_WindSpeed_input: Folder and File containing Wind speed and corresponding rpm, pitch angle for computing wind speed characteristics of the turbine
 1 2 3                --WindSpeed_col, RotorSpeed_col,BladePitch_col: Columns in the above input file WindSpeed, RotorSpeed and BladePitch data respectively (separated by space)
 2 0                  --header_WindSpeed_inp,footer_WindSpeed_inp (seperated by space)
 output               --save_folder_WindSpeed_Character: Folder to save the data. If same folder use (.)
-KDWT25_WindSpeed_Character  --save_file_WindSpeed_Character:file where Power, Torque, Thrust are saved as a function of wind speed
+KDWT300kW_WindSpeed_Character  --save_file_WindSpeed_Character:file where Power, Torque, Thrust are saved as a function of wind speed
 #
 #----------COMPUTATION RELATED--------------------------------------
-0.33 0.01             --a_ax_ini,a_ang_ini:Initial axial and angular induction factor
+0.3 0.01             --a_ax_ini,a_ang_ini:Initial axial and angular induction factor
 0.001                 --a_tol: Tolerance for induction factors
 1000                  --a_iter_max: Maximum iteration for induction factor calculation loop
 True                  --tip_loss: Flag for including tip loss correction factor. Only Prandtl's tip loss is implemented. True or False (logic)
 1.2                   --AirDensity  [kg/m^3]
 #
 #----------ROTOR PARAMETERS-----------------------------------------
-0.25                   --Drotor: Rotor diameter [m]
-3                      --Nblade: Number of blades
+33                    --Drotor: Rotor diameter [m]
+3                     --Nblade: Number of blades
 #
 #
 #----------AIRFOIL PROPERTIES---------------------------------------
-1    	      	       --Nairfoil: Number of airfoils used (maximum 10)
+3    	      	       --Nairfoil: Number of airfoils used (maximum 10)
 #Airfoilfile: name& folder, Afoil no., AoA_col, Cl_col, Cd_col, header, footer. e.g. AoA_col: column in Cl Cd file with angle of attack
-setup/SD7003_Re50000_ClCd, 1, 1, 2, 3, 1, 0
-dum, 2, 0, 0, 0, 0, 0                 
-dum, 3, 0, 0, 0, 0, 0  	   
+setup/KDWT300kW_AirFoil1_Re1500000.dat, 1, 1, 2, 3, 1, 0
+setup/KDWT300kW_AirFoil2_Re1500000.dat, 2, 1, 2, 3, 1, 0
+setup/KDWT300kW_AirFoil3_Re1500000.dat, 3, 1, 2, 3, 1, 0
 dum, 4, 0, 0, 0, 0, 0      	        
 dum, 5, 0, 0, 0, 0, 0      	        
 dum, 6, 0, 0, 0, 0, 0      	       
@@ -42,16 +42,22 @@ dum, 8, 0, 0, 0, 0, 0
 dum, 9, 0, 0, 0, 0, 0      	       
 dum, 10, 0, 0, 0, 0, 0
 #----------BLADE PROPERTIES---------------------------------------
-11                     --Nnode: Number of blade nodes
+17                     --Nnode: Number of blade nodes
 Rnode [m], dRnode[m],Chord[m],Twist[deg],Afoil no.
-0.02,0.01,0.0367350114651088,28.226794497273275,1
-0.03,0.01,0.03352124670565333,20.537047394843466,1
-0.04,0.01,0.029078359779059253,15.33692213872233,1
-0.05,0.01,0.025131563010403795,11.710034118051993,1
-0.06,0.01,0.021913488683782126,9.079909965360283,1
-0.07,0.01,0.019328021889902156,7.102549372035536,1
-0.08,0.01,0.017238639719006445,5.569349757507549,1
-0.09,0.01,0.0155297171405895,4.349407331169504,1
-0.1,0.01,0.01411318227368596,3.3574956452843185,1
-0.11,0.01,0.012923713334793275,2.5361773768578324,1
-0.12,0.01,0.0119129115216345,1.845525954680431,1
+1.027,1.027,0.86,11.90,1
+2.006,0.979,1.17,11.90,1
+3.014,1.007,1.57,11.90,1
+3.995,0.980,1.64,11.9,1
+4.997,1.002,1.57,11.9,1
+6.029,1.032,1.47,10.3,1
+7.022,0.992,1.37,8.60,1
+8.015,0.992,1.27,7.10,1
+8.953,0.938,1.17,5.20,2
+9.946,0.992,1.07,4.50,2
+10.96,1.017,0.96,3.20,2
+11.97,1.007,0.87,2.30,2
+12.97,0.999,0.77,1.40,2
+13.97,1.002,0.68,-0.3,2
+14.98,1.012,0.61,-0.10,3
+16.00,1.023,0.46,-0.7,3
+16.35,0.341,0.23,0.00,3
