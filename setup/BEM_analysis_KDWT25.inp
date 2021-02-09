@@ -26,8 +26,8 @@ True                  --tip_loss: Flag for including tip loss correction factor.
 #----------ROTOR PARAMETERS-----------------------------------------
 0.25                   --Drotor: Rotor diameter [m]
 3                      --Nblade: Number of blades
-#
-#
+100.0                  --Efficiency_GBox: Gearbox efficiency. If not available use 100 [%]
+100.0                  --Efficiency_Generator: Generator efficiency. If not available use 100 [%]
 #----------AIRFOIL PROPERTIES---------------------------------------
 1    	      	       --Nairfoil: Number of airfoils used (maximum 10)
 #Airfoilfile: name& folder, Afoil no., AoA_col, Cl_col, Cd_col, header, footer. e.g. AoA_col: column in Cl Cd file with angle of attack

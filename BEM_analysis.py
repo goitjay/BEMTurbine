@@ -87,11 +87,13 @@ def BEM_analysis():
         tip_loss=str2bool(lines[22].split(' ')[0]) # Flag for including tip loss correction factor. Only Prandtl's tip loss is implemented. True or False (logic)
         AirDensity=float(lines[23].split(' ')[0]) # Density of Air [kg/m^3]
         
-        #---Rotor parameters
-        global Drotor, Rad_rotor, Nblade
+        #---WIND TURBINE PARAMETERS
+        global Drotor, Rad_rotor, Nblade, Efficiency_GBox,Efficiency_Generator
         Drotor =float(lines[26].split(' ')[0]) # Rotor diameter
         Rad_rotor=Drotor/2.0 # Radius of rotor
         Nblade =int(lines[27].split(' ')[0])   # Number of blades
+        Efficiency_GBox=float(lines[28].split(' ')[0]) # Gearbox efficiency [%]
+        Efficiency_Generator=float(lines[29].split(' ')[0]) # Generator efficiency [%]
         
         #---Airfoil properties
         global Nairfoil, Airfoilfile, Airfoil_no, AoA_col, Cl_col, Cd_col, header_Airfoilfile, footer_Airfoilfile
@@ -214,7 +216,7 @@ def compute_save_WindSpeed_vs_Thrust_Torque_Power(file_WindSpeed_input,WindSpeed
     Thrust = np.zeros(WindSpeed.shape[0]) # Thrust 
     Torque = np.zeros(WindSpeed.shape[0]) # Torque
     Power = np.zeros(WindSpeed.shape[0]) # Power 
-    
+    Power_generator = np.zeros(WindSpeed.shape[0]) # Generator Power after considering gearbox and generator efficiency
     
     #---Iteration for each wind speed
     for j in range(WindSpeed.shape[0]):
@@ -228,15 +230,16 @@ def compute_save_WindSpeed_vs_Thrust_Torque_Power(file_WindSpeed_input,WindSpeed
         Torque[j] = Cq*0.5*AirDensity*WindSpeed[j]**2*np.pi*Rad_rotor**3 # Torque [Nm]
         Power[j]  = Cp*0.5*AirDensity*WindSpeed[j]**3*np.pi*Rad_rotor**2 # Power [W]
         
-    save_dat = np.array([WindSpeed[:],RotorSpeed[:],BladePitch[:]*180/np.pi,Thrust[:],Torque[:],Power[:]]).T
+    Power_generator=Efficiency_GBox/100*Efficiency_Generator/100*Power
+    save_dat = np.array([WindSpeed[:],RotorSpeed[:],BladePitch[:]*180/np.pi,Thrust[:],Torque[:],Power[:],Power_generator[:]]).T
     
     with open(save_file ,'w') as f:
         f.write('Wind turbine output as a function of wind speed'+'\n')
         f.write('Rotor diameter: '+str(Drotor)+'\n')
-        f.write('Wind speed (m/s), Rotor speed (rpm), Blade Pitch Angle (deg), Thrust [N], Torque [Nm], Power [W]'+'\n')
+        f.write('Wind speed (m/s), Rotor speed (rpm), Blade Pitch Angle (deg), Thrust (N), Torque (Nm), Power Rotor (W), Power generator (W)'+'\n')
     
     with open(save_file,'ab') as f:
-        np.savetxt(f,save_dat[:,:],fmt='%s,%s,%s,%s,%s,%s')
+        np.savetxt(f,save_dat[:,:],fmt='%s,%s,%s,%s,%s,%s,%s')
 
 
     return

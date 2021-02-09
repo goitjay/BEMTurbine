@@ -23,11 +23,11 @@ KDWT300kW_WindSpeed_Character  --save_file_WindSpeed_Character:file where Power,
 True                  --tip_loss: Flag for including tip loss correction factor. Only Prandtl's tip loss is implemented. True or False (logic)
 1.2                   --AirDensity  [kg/m^3]
 #
-#----------ROTOR PARAMETERS-----------------------------------------
+#----------WIND TURBINE PARAMETERS-----------------------------------------
 33                    --Drotor: Rotor diameter [m]
 3                     --Nblade: Number of blades
-#
-#
+97.0                  --Efficiency_GBox: Gearbox efficiency. If not available use 100 [%]
+94.5                  --Efficiency_Generator: Generator efficiency. If not available use 100 [%]
 #----------AIRFOIL PROPERTIES---------------------------------------
 3    	      	       --Nairfoil: Number of airfoils used (maximum 10)
 #Airfoilfile: name& folder, Afoil no., AoA_col, Cl_col, Cd_col, header, footer. e.g. AoA_col: column in Cl Cd file with angle of attack
